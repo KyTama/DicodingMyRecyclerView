@@ -1,6 +1,7 @@
 package com.dicodeky.myrecyclerview;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.dicodeky.myrecyclerview.adapter.CardViewHeroAdapter;
+import com.dicodeky.myrecyclerview.adapter.GridHeroAdapter;
 import com.dicodeky.myrecyclerview.adapter.ListHeroAdapter;
 import com.dicodeky.myrecyclerview.model.Hero;
 import com.dicodeky.myrecyclerview.model.HeroesData;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String title = "Mode List";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         list.addAll(HeroesData.getListData());
         showRecyclerList();
+        setActonBarTitle(title);
 
     }
 
@@ -35,6 +40,18 @@ public class MainActivity extends AppCompatActivity {
         rvHeroes.setLayoutManager(new LinearLayoutManager(this));
         ListHeroAdapter listHeroAdapter = new ListHeroAdapter(list);
         rvHeroes.setAdapter(listHeroAdapter);
+    }
+
+    public void showRecyclerGrid(){
+        rvHeroes.setLayoutManager(new GridLayoutManager(this, 2));
+        GridHeroAdapter gridHeroAdapter = new GridHeroAdapter(list);
+        rvHeroes.setAdapter(gridHeroAdapter);
+    }
+
+    public void showRecyclerCardView(){
+        rvHeroes.setLayoutManager(new LinearLayoutManager(this));
+        CardViewHeroAdapter cardViewHeroAdapter = new CardViewHeroAdapter(list);
+        rvHeroes.setAdapter(cardViewHeroAdapter);
     }
 
     @Override
@@ -50,17 +67,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setMode(int selectedMode) {
+        String title = "";
         switch (selectedMode) {
             case R.id.action_list:
+                title = "Mode List";
+                showRecyclerList();
                 break;
 
             case R.id.action_grid:
+                title = "Mode Grid";
+                showRecyclerGrid();
                 break;
 
             case R.id.action_cardview:
+                title = "Mode CardView";
+                showRecyclerCardView();
                 break;
 
 
         }
+        setActonBarTitle(title);
     }
+
+    private void setActonBarTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
 }
